@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:shopping_list/screens/menu.dart';
 import 'package:shopping_list/widgets/left_drawer.dart';
 
 class ShopFormPage extends StatefulWidget {
@@ -17,6 +22,8 @@ class _ShopFormPageState extends State<ShopFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Product Form'),
@@ -131,8 +138,44 @@ class _ShopFormPageState extends State<ShopFormPage> {
                               actions: [
                                 TextButton(
                                   child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      // Send request to Django and wait for the response
+                                      // Change the URL to your Django app's URL. Don't forget to add the trailing slash (/) if needed.
+                                      final response = await request.postJson(
+                                          "http://bramantyo-priyo-tutorial.pbp.cs.ui.ac.id/create-flutter/",
+                                          jsonEncode(<String, String>{
+                                            'name': _name,
+                                            'price': _price.toString(),
+                                            'date_added': DateTime.now()
+                                                .toString()
+                                                .substring(0, 10),
+                                            'description': _description,
+                                            // Adjust the fields with your Django model
+                                          }));
+                                      if (response['status'] == 'success') {
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "New product has saved successfully!"),
+                                        ));
+                                        // ignore: use_build_context_synchronously
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MyHomePage()),
+                                        );
+                                      } else {
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "Something went wrong, please try again."),
+                                        ));
+                                      }
+                                    }
                                   },
                                 ),
                               ],
