@@ -81,7 +81,10 @@ class _ProductPageState extends State<ProductPage> {
                                 Text("${snapshot.data![index].fields.price}"),
                                 const SizedBox(height: 10),
                                 Text(
-                                    "${snapshot.data![index].fields.description}")
+                                    "${snapshot.data![index].fields.description}"),
+                                const SizedBox(height: 10),
+                                Text(
+                                    "${snapshot.data![index].fields.dateAdded}"),
                               ],
                             ),
                           ));

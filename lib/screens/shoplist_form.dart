@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +16,7 @@ class ShopFormPage extends StatefulWidget {
 class _ShopFormPageState extends State<ShopFormPage> {
   final _formKey = GlobalKey<FormState>();
   String _name = "";
+  final DateTime _dateTime = DateTime.now();
   int _price = 0;
   String _description = "";
 
@@ -147,9 +147,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
                                           jsonEncode(<String, String>{
                                             'name': _name,
                                             'price': _price.toString(),
-                                            'date_added': DateTime.now()
-                                                .toString()
-                                                .substring(0, 10),
+                                            'date_added': _dateTime.toString(),
                                             'description': _description,
                                             // Adjust the fields with your Django model
                                           }));
