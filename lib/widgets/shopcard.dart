@@ -47,7 +47,7 @@ class ShopCard extends StatelessWidget {
           } else if (item.name == "Logout") {
             final response = await request.logout(
                 // Change the URL to your Django app's URL. Don't forget to add the trailing slash (/) if needed.
-                "http://<YOUR_DJANGO_APP_URL>/auth/logout/");
+                "http://127.0.0.1:8000/auth/logout/");
             String message = response["message"];
             if (response['status']) {
               String uname = response["username"];
